@@ -26,9 +26,9 @@
   --secondary: #1e3a8a;
   --tertiary: #4d7c0f;
   --panel-bg: rgba(255, 255, 255, 0.6);
-  --glass-bg: rgba(255, 255, 255, 0.55);
-  --glass-border: rgba(255, 255, 255, 0.7);
-  --glass-shadow: 0 0 0 1px rgba(18, 18, 18, 0.06), 0 10px 40px -12px rgba(18, 18, 18, 0.25);
+  --glass-bg: rgba(255, 255, 255, 0.22);
+  --glass-border: rgba(255, 255, 255, 0.55);
+  --glass-shadow: 0 0 0 1px rgba(18, 18, 18, 0.04), 0 10px 40px -12px rgba(18, 18, 18, 0.22);
   --glow: rgba(15, 118, 110, 0.28);
   --shot-shadow: 0 24px 60px -24px rgba(18, 18, 18, 0.45);
 
@@ -145,7 +145,9 @@ kbd {
 .btn-outline:hover { background: color-mix(in srgb, var(--fg) 5%, transparent); opacity: 1; }
 .btn-sm { height: 36px; padding: 0 14px; }
 
-/* Header: a floating glass pill */
+/* Header: a floating glass pill, measured against imzishan.com's so the two
+   line up exactly when switching tabs: 16px from the top (20px from 640px),
+   reaching 16px past the content on each side, 56px tall. */
 .header { position: fixed; inset: 0 0 auto; z-index: 50; pointer-events: none; }
 .header .wrap { padding-top: 16px; }
 .header-pill {
@@ -153,8 +155,12 @@ kbd {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   height: 56px;
-  padding: 0 10px 0 20px;
+  margin: 0 -16px;
+  /* 10px 10px 10px 16px inside the 1px border, as on imzishan.com, where the
+     border sits on a separate glass layer. */
+  padding: 9px 9px 9px 15px;
   border-radius: 999px;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -168,23 +174,45 @@ kbd {
   gap: 8px;
   font-size: 20px;
   font-weight: 700;
+  line-height: 1;
   letter-spacing: -0.05em;
   color: var(--accent);
 }
-.logo:hover { text-decoration: none; }
-.logo img { width: 26px; height: 26px; }
-.logo .dot { color: var(--fg); }
+.logo:hover { text-decoration: none; opacity: 0.8; }
+.logo img { width: 22px; height: 22px; }
+.logo .dot { color: var(--tertiary); }
 .header nav { display: flex; align-items: center; gap: 4px; }
-.header nav a:not(.btn) {
-  padding: 8px 12px;
+.header nav a {
+  padding: 6px 14px;
   font-size: 14px;
+  line-height: 20px;
   color: var(--muted);
   border-radius: 999px;
-  transition: color 0.15s var(--ease);
+  transition: color 0.15s var(--ease), background-color 0.15s var(--ease);
 }
-.header nav a:not(.btn):hover { color: var(--fg); text-decoration: none; }
-.icon-link svg { width: 18px; height: 18px; display: block; }
-.header .btn-sm { margin-left: 6px; }
+.header nav a:hover { color: var(--fg); background: color-mix(in srgb, var(--fg) 7%, transparent); text-decoration: none; }
+.header-actions { display: flex; align-items: center; gap: 8px; }
+.btn-inverse { background: var(--fg); color: var(--bg); }
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--fg);
+  transition: opacity 0.15s var(--ease);
+}
+.icon-btn:hover { opacity: 0.8; }
+.icon-btn svg { width: 16px; height: 16px; display: block; }
+@media (min-width: 640px) {
+  .header .wrap { padding-top: 20px; }
+  .logo { font-size: 22px; }
+}
+@media (max-width: 767px) {
+  .header nav { display: none; }
+}
 
 /* Hero */
 .hero { padding: 152px 0 72px; overflow-x: clip; }
@@ -352,8 +380,6 @@ kbd {
   .footer-top { flex-direction: column; }
 }
 @media (max-width: 600px) {
-  .header nav a:not(.btn):not(.icon-link) { display: none; }
-  .header-pill { padding-left: 16px; }
   .shot { padding: 20px; }
   .phrases li { flex-direction: column; }
 }
